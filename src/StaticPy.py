@@ -31,12 +31,11 @@ def detectVariableType(self, value):
 validTypes = ["string", "list", "dict", "bool", "bool", "int", "float", "void"]
 
 class Convert:
-    def __init__(self, folder):
+    def __init__(self, file):
         self.output = []
         self.variables = {}
         self.functions = {}
-        self.file = None
-        self.folder = folder
+        self.file = file
         self.lineNum = 1
         self.checkReturn = False
 
@@ -160,30 +159,27 @@ class Convert:
         return spaces + " ".join(string)
 
     def parseFile(self):
-        files = glob.glob(self.folder + "/**/*.spy", recursive=True)
-
-        for file in files:
-            self.file = file
+        with open(self.file) as f:
+            self.fileLines = f.read().splitlines()
+    
+        for line in self.fileLines:
+            spaces = line.split(" ")
+            self.output.append(self.convertToPy(spaces))
+            self.lineNum += 1
             
-            with open(self.file) as f:
-                self.fileLines = f.read().splitlines()
-        
-            for line in self.fileLines:
-                spaces = line.split(" ")
-                self.output.append(self.convertToPy(spaces))
-                self.lineNum += 1
-            
-            with open("built\\" + self.file.replace(".spy", ".py").replace("src\\", ""), "w") as f:
-                f.write("\n".join(self.output))
+        with open(self.file.replace(".spy", ".py").replace("src\\", ""), "w") as f:
+            f.write("\n".join(self.output))
 
-            self.output = []
-            self.variables = {}
-            self.functions = {}
-            self.lineNum = 1
+        self.output = []
+        self.variables = {}
+        self.functions = {}
+        self.lineNum = 1
 
-if not os.path.exists("src"):
-    os.mkdir("src")
-if not os.path.exists("built"):
-    os.mkdir("built")
-
-Convert("src")
+if len(sys.argv) != 2:
+    print("Invalid arguments")
+    print("Usage:")
+    print("\tstaticpy.exe 'test.py'")
+elif not os.path.exists(sys.argv[1]):
+    print("Unable to locate: " + sys.argv[1])
+else:
+    Convert(sys.argv[1])

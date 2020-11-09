@@ -1,16 +1,12 @@
 # How to get started
 ## Requirements
 ```
-Python 3.8 or higher
+Python 3.8 or higher and execute the .py file
+Or just use the provided built exe file
 ```
 
-To get started you just have to execute the program and you will see two folders get created
-
-- built
-- src
-
-`src` is the location where you place your code the file format is .spy
-
-After you finish your .spy files inside of src just run the StaticPy program again and it will attempt to build your code and tell you of any errors.
-
-After this is complete you will see your .py files inside of built that you can execute normally
+To build your program follow these simple steps
+- Step 1
+ - Open cmd, powershell, terminal, or whatever command line tool you use
+- Step 2
+ - Run the following command `StaticPy.exe/.py 'filenamehere.spy'`
